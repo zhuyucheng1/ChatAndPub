@@ -10,6 +10,8 @@ import org.springframework.util.ResourceUtils;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 
 /**
@@ -152,8 +154,11 @@ public class UseDemo {
 //        File file = new File(this.originalPath);
 //        StringBuffer stringBuffer = new StringBuffer();
         try {
-            File file = ResourceUtils.getFile("c://git//fenciku.txt");
-            InputStream stream =  new FileInputStream(file);
+            URL url = new URL("http://118.25.59.30:9091/fenciku.txt");
+//            File file = ResourceUtils.getFile();
+//            String url = "http://118.25.59.30:9091/fenciku.txt";
+            URLConnection conn = url.openConnection();
+            InputStream stream =  conn.getInputStream();
 //            InputStream stream = getClass().getClassLoader().getResourceAsStream("fenciku.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(stream, "GBK"));
             String line;

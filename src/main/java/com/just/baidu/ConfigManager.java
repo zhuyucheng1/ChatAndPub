@@ -11,6 +11,8 @@ import com.just.util.LogUtils;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -124,10 +126,15 @@ public final class ConfigManager {
 //        File file = new File(this.originalPath);
         StringBuffer stringBuffer = new StringBuffer();
         try {
-            ClassPathResource classPathResource = new ClassPathResource("config.json");
-//            InputStream stream = classPathResource.getInputStream();
-//            InputStream stream = getClass().getClassLoader().getResourceAsStream(configFileName);
-            InputStream stream = this.getClass().getResourceAsStream("/config.json");
+            URL url = new URL("http://118.25.59.30:9091/config.json");
+//            File file = ResourceUtils.getFile();
+//            String url = "http://118.25.59.30:9091/fenciku.txt";
+            URLConnection conn = url.openConnection();
+            InputStream stream =  conn.getInputStream();
+//            ClassPathResource classPathResource = new ClassPathResource("config.json");
+////            InputStream stream = classPathResource.getInputStream();
+////            InputStream stream = getClass().getClassLoader().getResourceAsStream(configFileName);
+//            InputStream stream = this.getClass().getResourceAsStream("/config.json");
             String path = ConfigManager.class.getResource("").getPath();
             LogUtils.error(path);
             BufferedReader br = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
@@ -138,6 +145,7 @@ public final class ConfigManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         String configContent = filter(stringBuffer.toString());
         try {
             JSONObject jsonConfig = JSONObject.parseObject(configContent);
