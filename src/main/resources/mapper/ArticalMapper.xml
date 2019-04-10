@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.just.dao.ArticalDao">
+  <resultMap id="BaseResultMap" type="com.just.bean.Artical">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="cover" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="attach" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="readnum" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="reply" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="is_reply" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="author_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="author_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tags" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="order_type" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="order_co" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="likes" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="abs" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.just.bean.Artical">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="cover" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="attach" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="readnum" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="reply" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="is_reply" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="author_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="author_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tags" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.lang.String" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.lang.String" jdbcType="TIMESTAMP" />
+      <arg column="order_type" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="order_co" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+      <arg column="likes" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="abs" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, title, cover, attach, readnum, reply, is_reply, author_id, author_name, tags, create_time,
+    update_time, order_type, order_co,likes,abs
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+    <select id="getAll" parameterType="map" resultMap="ResultMapWithBLOBs">
+        select * from artical limit #{offset},#{limit}
+    </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    *
+    from artical
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from artical
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.just.bean.Artical">
+    insert into artical (id, title, cover, 
+      attach, read, reply, 
+      is_reply, author_id, author_name, 
+      tags, create_time, update_time, 
+      order_type, order_co, content
+      )
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{cover,jdbcType=VARCHAR}, 
+      #{attach,jdbcType=VARCHAR}, #{read,jdbcType=INTEGER}, #{reply,jdbcType=INTEGER}, 
+      #{isReply,jdbcType=INTEGER}, #{authorId,jdbcType=INTEGER}, #{authorName,jdbcType=VARCHAR}, 
+      #{tags,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{orderType,jdbcType=INTEGER}, #{orderCo,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="map">
+    insert into artical
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="cover != null">
+        cover,
+      </if>
+      <if test="attach != null">
+        attach,
+      </if>
+      <if test="read != null">
+        read,
+      </if>
+      <if test="reply != null">
+        reply,
+      </if>
+      <if test="isReply != null">
+        is_reply,
+      </if>
+      <if test="authorId != null">
+        author_id,
+      </if>
+      <if test="authorName != null">
+        author_name,
+      </if>
+      <if test="tags != null">
+        tags,
+      </if>
+        create_time,
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="orderType != null">
+        order_type,
+      </if>
+      <if test="orderCo != null">
+        order_co,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="like != null">
+        likes,
+      </if>
+      <if test="abs != null">
+        abs,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="cover != null">
+        #{cover,jdbcType=VARCHAR},
+      </if>
+      <if test="attach != null">
+        #{attach,jdbcType=VARCHAR},
+      </if>
+      <if test="read != null">
+        #{read,jdbcType=INTEGER},
+      </if>
+      <if test="reply != null">
+        #{reply,jdbcType=INTEGER},
+      </if>
+      <if test="isReply != null">
+        #{isReply,jdbcType=INTEGER},
+      </if>
+      <if test="authorId != null">
+        #{authorId,jdbcType=INTEGER},
+      </if>
+      <if test="authorName != null">
+        #{authorName,jdbcType=VARCHAR},
+      </if>
+      <if test="tags != null">
+        #{tags,jdbcType=VARCHAR},
+      </if>
+      now(),
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderType != null">
+        #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="orderCo != null">
+        #{orderCo,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="like != null">
+        #{likes,jdbcType=INTEGER},
+      </if>
+      <if test="abs != null">
+        #{abs,jdbcType=VARCHAR},
+
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="map">
+    update artical
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="cover != null">
+        cover = #{cover,jdbcType=VARCHAR},
+      </if>
+      <if test="attach != null">
+        attach = #{attach,jdbcType=VARCHAR},
+      </if>
+      <if test="read != null">
+        readnum = readnum+1,
+      </if>
+      <if test="reply != null">
+        reply = reply+1,
+      </if>
+      <if test="isReply != null">
+        is_reply = #{isReply,jdbcType=INTEGER},
+      </if>
+      <if test="authorId != null">
+        author_id = #{authorId,jdbcType=INTEGER},
+      </if>
+      <if test="authorName != null">
+        author_name = #{authorName,jdbcType=VARCHAR},
+      </if>
+      <if test="tags != null">
+        tags = #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = now(),
+      </if>
+      <if test="orderType != null">
+        order_type = #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="orderCo != null">
+        order_co = #{orderCo,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="likes != null">
+        likes = likes+1,
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.just.bean.Artical">
+    update artical
+    set title = #{title,jdbcType=VARCHAR},
+      cover = #{cover,jdbcType=VARCHAR},
+      attach = #{attach,jdbcType=VARCHAR},
+      read = #{read,jdbcType=INTEGER},
+      reply = #{reply,jdbcType=INTEGER},
+      is_reply = #{isReply,jdbcType=INTEGER},
+      author_id = #{authorId,jdbcType=INTEGER},
+      author_name = #{authorName,jdbcType=VARCHAR},
+      tags = #{tags,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      order_type = #{orderType,jdbcType=INTEGER},
+      order_co = #{orderCo,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.just.bean.Artical">
+    update artical
+    set title = #{title,jdbcType=VARCHAR},
+      cover = #{cover,jdbcType=VARCHAR},
+      attach = #{attach,jdbcType=VARCHAR},
+      read = #{read,jdbcType=INTEGER},
+      reply = #{reply,jdbcType=INTEGER},
+      is_reply = #{isReply,jdbcType=INTEGER},
+      author_id = #{authorId,jdbcType=INTEGER},
+      author_name = #{authorName,jdbcType=VARCHAR},
+      tags = #{tags,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      order_type = #{orderType,jdbcType=INTEGER},
+      order_co = #{orderCo,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
