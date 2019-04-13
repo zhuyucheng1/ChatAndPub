@@ -1,20 +1,20 @@
 package com.just.controller;
 
 import com.just.bean.Artical;
+import com.just.bean.Question;
 import com.just.bean.Student;
 import com.just.service.ArticleService;
+import com.just.service.QuestionService;
 import com.just.service.ReplyService;
 import com.just.service.WxUploadService;
 import com.just.util.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 import java.io.IOException;
 import java.util.List;
 
@@ -35,6 +35,9 @@ public class ArticleController {
     MyCache myCache;
     @Autowired
     ReplyService replyService;
+    @Autowired
+    QuestionService questionService;
+
     /**
      * @return com.yayin.tool.Response
      * @Author zhuyucheng
@@ -97,5 +100,64 @@ public class ArticleController {
         paramMap.put("like",1);
         paramMap.put("id",id);
         articleService.getSee(paramMap);
+    }
+
+    /**
+    * @return com.just.util.Response
+    * @Author zhuyucheng
+    * @Description 根据id获取文章或者问题
+    * @Date 15:34 2019/4/13
+    * @Email zhuyucheng@jsaepay.com
+    * @Param []
+    **/
+    @RequestMapping("getRep")
+    public Response getArticleBuId(@RequestBody ParamMap paramMap){
+        Response response = Response.newResponse();
+        int type = paramMap.getInt("type");
+        if(type == 1){
+            response.setData(articleService.getById(paramMap.getInt("id")));
+            return response;
+        }else{
+            response.setData(questionService.getById(paramMap.getInt("id")));
+            return response;
+        }
+    }
+
+    @RequestMapping("getArticlesByUser")
+    public Response getArticlesByUser(@RequestBody ParamMap paramMap, HttpServletRequest request){
+        Student student = myCache.getLoginUser(GetSessionId.getSessionId(request));
+        paramMap.setPages(paramMap.getPageIndex(),paramMap.getPageSize());
+        Response response = Response.newResponse();
+        paramMap.add("userId",student.getId());
+        response.setData(articleService.getAll(paramMap));
+        return response;
+    }
+
+    @RequestMapping("deleteArticle/{id}")
+    public void deleteArticle ( @PathVariable("id") Integer id){
+        articleService.delete(id);
+    }
+
+    @RequestMapping("getTop5")
+    public Response getTop5(){
+        ParamMap paramMap = ParamMap.newMap();
+        paramMap.add("reply",1);
+        paramMap.setPages(0,5);
+       return Response.newResponse().setData(articleService.getAll(paramMap)) ;
+    }
+
+    @RequestMapping("getNew")
+    public Response getNew(){
+        ParamMap paramMap = ParamMap.newMap();
+        paramMap.add("newlest",1);
+        paramMap.setPages(0,5);
+        return Response.newResponse().setData(articleService.getAll(paramMap)) ;
+    }
+    @RequestMapping("getRead")
+    public Response getRead(){
+        ParamMap paramMap = ParamMap.newMap();
+        paramMap.add("look",1);
+        paramMap.setPages(0,3);
+        return Response.newResponse().setData(articleService.getAll(paramMap)) ;
     }
 }

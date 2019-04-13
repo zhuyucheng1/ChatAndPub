@@ -17,9 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public final class ConfigManager {
+public final class ConfigManager1 {
     private final String rootPath;
-    private final String originalPath;
+//    private final String originalPath;
     private final String contextPath;
     private static final String configFileName = "config.json";
     private String parentPath = null;
@@ -27,7 +27,7 @@ public final class ConfigManager {
     private static final String SCRAWL_FILE_NAME = "scrawl";
     private static final String REMOTE_FILE_NAME = "remote";
 
-    private ConfigManager(String rootPath, String contextPath, String uri) throws FileNotFoundException, IOException {
+    private ConfigManager1(String rootPath, String contextPath, String uri) throws FileNotFoundException, IOException {
         rootPath = rootPath.replace("\\", "/");
         this.rootPath = rootPath;
         this.contextPath = contextPath;
@@ -37,15 +37,16 @@ public final class ConfigManager {
 //            this.originalPath = this.rootPath + uri;
 //        }
 
-
-        this.originalPath = ConfigManager.class.getResource("").getPath().substring(0,ConfigManager.class.getResource("").getPath().indexOf("targ"))+"src/main/resources/"+configFileName;
+//        LogUtils.warn("呵呵哒老子在这");
+//        this.originalPath = ConfigManager1.class.getResource("").getPath().substring(0,ConfigManager1.class.getResource("").getPath().indexOf("targ"))+"src/main/resources/"+configFileName;
 //        System.out.println(this.originalPath);
         this.initEnv();
     }
 
-    public static ConfigManager getInstance(String rootPath, String contextPath, String uri) {
+    public static ConfigManager1 getInstance(String rootPath, String contextPath, String uri) {
         try {
-            return new ConfigManager(rootPath, contextPath, uri);
+//            LogUtils.warn("我在构造函数c");
+            return new ConfigManager1(rootPath, contextPath, uri);
         } catch (Exception var4) {
             return null;
         }
@@ -124,6 +125,7 @@ public final class ConfigManager {
     **/
     private void initEnv() throws FileNotFoundException, IOException {
 //        File file = new File(this.originalPath);
+//        LogUtils.warn("老子开始读啦");
         StringBuffer stringBuffer = new StringBuffer();
         try {
             URL url = new URL("http://118.25.59.30:9091/config.json");
@@ -135,7 +137,7 @@ public final class ConfigManager {
 ////            InputStream stream = classPathResource.getInputStream();
 ////            InputStream stream = getClass().getClassLoader().getResourceAsStream(configFileName);
 //            InputStream stream = this.getClass().getResourceAsStream("/config.json");
-            String path = ConfigManager.class.getResource("").getPath();
+            String path = ConfigManager1.class.getResource("").getPath();
             LogUtils.error(path);
             BufferedReader br = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
             String line;
@@ -146,7 +148,12 @@ public final class ConfigManager {
             e.printStackTrace();
         }
 
+
+//        LogUtils.info("xxxooooo");
+//        LogUtils.info(stringBuffer);
         String configContent = filter(stringBuffer.toString());
+        LogUtils.info(configContent);
+//        LogUtils.error(configContent);
         try {
             JSONObject jsonConfig = JSONObject.parseObject(configContent);
             this.jsonConfig = jsonConfig;
@@ -156,9 +163,14 @@ public final class ConfigManager {
 
     }
 
-    private String getConfigPath() {
-        return this.parentPath + File.separator + "config.json";
-    }
+
+
+        private InputStream getConfigPath() {
+
+            //获取config.json的输入流
+            return this.getClass().getClassLoader().getResourceAsStream("config.json");
+        }
+
 
     private String[] getArray(String key) {
         JSONArray jsonArray = this.jsonConfig.getJSONArray(key);
@@ -172,24 +184,32 @@ public final class ConfigManager {
         return result;
     }
 
-    private String readFile(String path) throws IOException {
+    private String readFile(InputStream in) throws IOException {
+
         StringBuilder builder = new StringBuilder();
 
         try {
-            InputStreamReader reader = new InputStreamReader(new FileInputStream(path), "UTF-8");
+
+            InputStreamReader reader = new InputStreamReader(in, "UTF-8");
             BufferedReader bfReader = new BufferedReader(reader);
+
             String tmpContent = null;
-            while((tmpContent = bfReader.readLine()) != null) {
+
+            while ((tmpContent = bfReader.readLine()) != null) {
                 builder.append(tmpContent);
             }
 
             bfReader.close();
-        } catch (UnsupportedEncodingException var6) {
+
+        } catch (UnsupportedEncodingException e) {
+            // 忽略
         }
+
         return this.filter(builder.toString());
+
     }
 
-    private String filter(String input) {
+        private String filter(String input) {
         return input.replaceAll("/\\*[\\s\\S]*?\\*/", "");
     }
 }

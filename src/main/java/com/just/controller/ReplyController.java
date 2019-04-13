@@ -38,9 +38,12 @@ public class ReplyController {
     public void reply(@RequestBody ParamMap paramMap, HttpServletRequest request){
          Student student = myCache.getLoginUser(GetSessionId.getSessionId(request));
          paramMap.put("stuId",student.getId());
+
          LogUtils.info(articleService.getById(paramMap.getInt("repId")).getAuthorId());
          if(paramMap.getInt("type") == 1){
              paramMap.put("repStuId",articleService.getById(paramMap.getInt("repId")).getAuthorId());
+             paramMap.put("reply",1);
+             articleService.getSee(paramMap);
          }else{
              paramMap.put("repStuId",questionService.getById(paramMap.getInt("repId")).getAutortId());
          }

@@ -2,8 +2,11 @@ package com.just.service;
 
 import com.just.bean.Student;
 import com.just.dao.StudentDao;
+import com.just.util.ParamMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @Author 朱玉成
@@ -25,4 +28,17 @@ public class StudentService {
         studentDao.insertSelective(student);
         return studentDao.selectByAccount(student.getAccount());
     }
+
+    public List<Student> getStudents(ParamMap paramMap){
+        return  studentDao.getStudents(paramMap);
+    }
+
+    public void Update(Student student){
+        studentDao.updateByPrimaryKeySelective(student);
+    }
+
+    public void delete(Long id){
+        studentDao.deleteByPrimaryKey(id);
+    }
+
 }

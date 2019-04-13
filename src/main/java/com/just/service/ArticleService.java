@@ -34,4 +34,8 @@ public class ArticleService {
     public Artical getById(Integer id){
         return articalDao.selectByPrimaryKey(id);
     }
+
+    public void delete(Integer id){
+        articalDao.deleteByPrimaryKey(id);
+    }
 }

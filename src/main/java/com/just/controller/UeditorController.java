@@ -1,7 +1,7 @@
 package com.just.controller;
 
 
-import com.just.baidu.ActionEnter;
+import com.just.baidu.ActionEnter1;
 import com.just.util.LogUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,10 +31,12 @@ public class UeditorController   {
     @RequestMapping(value = "/exec")
      @ResponseBody
      public String exec(HttpServletRequest request) throws UnsupportedEncodingException {
-        request.setCharacterEncoding("utf-8");
+        request.setCharacterEncoding("gbk");
         String rootPath = "src/main/resources/";
 //        System.out.println("我进来了");
-        String json = new ActionEnter( request, rootPath,null).exec();
+        ActionEnter1 actionEnter1 = new ActionEnter1( request, rootPath,null);
+        LogUtils.warn(actionEnter1);
+        String json = actionEnter1.exec();
         LogUtils.warn(json);
         return json;
     }

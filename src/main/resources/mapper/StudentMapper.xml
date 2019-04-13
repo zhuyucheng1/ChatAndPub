@@ -21,6 +21,19 @@
   <sql id="Base_Column_List">
     id, name, sex, head, account, password, admin, depId, is_leader, type, exec, pocket,status
   </sql>
+  <select id="getStudents" parameterType="map" resultMap="BaseResultMap">
+    select * from student
+    <where>
+      <if test="isLeader != null">
+        and is_leader is not null
+      </if>
+      <if test="notLeader != null">
+        and is_leader is null
+      </if>
+    </where>
+    limit #{offset},#{limit}
+  </select>
+
   <select id="selectByAccount" parameterType="java.lang.String" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"/> from student where account=#{account,jdbcType=VARCHAR}
   </select>

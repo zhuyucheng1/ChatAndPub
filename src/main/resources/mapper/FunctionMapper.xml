@@ -81,4 +81,8 @@
       html = #{html,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="getFunctionByUserId" parameterType="java.lang.Integer"  resultMap="BaseResultMap">
+    select * from function where id in (select function from stu_function where stu_id = #{id})
+  </select>
 </mapper>

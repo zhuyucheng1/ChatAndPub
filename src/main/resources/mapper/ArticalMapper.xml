@@ -50,7 +50,31 @@
     content
   </sql>
     <select id="getAll" parameterType="map" resultMap="ResultMapWithBLOBs">
-        select * from artical limit #{offset},#{limit}
+        select * from artical
+        <where>
+          <if test="userId != null">
+           and author_id = #{userId}
+          </if>
+          <if test="search != null">
+            and tags like '%${search}%'
+          </if>
+          <if test="reply != null or look != null or newlest != null">
+            and cover !=""
+          </if>
+        </where>
+        <if test="reply != null">
+          order by reply desc
+        </if>
+        <if test="look != null">
+          order by readnum desc
+        </if>
+        <if test="newlest != null">
+          order by create_time desc
+        </if>
+        <if test="reply == null and look == null and newlest == null">
+          order by update_time desc
+        </if>
+        limit #{offset},#{limit}
     </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select 

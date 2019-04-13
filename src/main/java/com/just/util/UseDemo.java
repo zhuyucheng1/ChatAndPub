@@ -165,6 +165,7 @@ public class UseDemo {
             while ((line = br.readLine()) != null) {
                 String str = line.trim();
                 stopWordSet.add(str);
+//                LogUtils.info(str);
 //                stringBuffer.append(line);
             }
         } catch (Exception e) {

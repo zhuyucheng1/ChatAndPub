@@ -14,6 +14,7 @@ import com.baidu.ueditor.hunter.ImageHunter;
 import com.baidu.ueditor.upload.Uploader;
 import com.just.fastdfs.FastDFSClient;
 import com.just.fastdfs.FastDFSFile;
+import com.just.util.LogUtils;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,25 +27,27 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-public class ActionEnter {
+public class ActionEnter1 {
     private HttpServletRequest request = null;
     private String rootPath = null;
     private String contextPath = null;
     private String actionType = null;
-    private ConfigManager configManager;
+    private ConfigManager1 configManager;
     private MultipartFile multipartFile;
 
-    public ActionEnter(HttpServletRequest request, String rootPath, MultipartFile multipartFile) {
+    public ActionEnter1(HttpServletRequest request, String rootPath, MultipartFile multipartFile) {
 
         this.request = request;
         this.rootPath = rootPath;
         this.actionType = request.getParameter("action");
         this.contextPath = request.getContextPath();
-        this.configManager = ConfigManager.getInstance(this.rootPath, this.contextPath, request.getRequestURI());
+//        LogUtils.warn("我在构造函数");
+        this.configManager = ConfigManager1.getInstance(this.rootPath, this.contextPath, request.getRequestURI());
 //        System.out.println(this.configManager);
     }
 
     public String exec() {
+//        LogUtils.warn("我在构造函数exec");
         String callbackName = this.request.getParameter("callback");
         if (callbackName != null) {
             return !this.validCallbackName(callbackName) ? (new BaseState(false, 401)).toJSONString() : callbackName + "(" + this.invoke() + ");";
@@ -54,6 +57,7 @@ public class ActionEnter {
     }
 
     public String invoke() {
+//        LogUtils.warn("我在构造函数invoke");
         if (this.actionType != null && ActionMap.mapping.containsKey(this.actionType)) {
             if (this.configManager != null && this.configManager.valid()) {
                 State state = null;

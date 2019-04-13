@@ -1,6 +1,9 @@
 package com.just.dao;
 
 import com.just.bean.Student;
+import com.just.util.ParamMap;
+
+import java.util.List;
 
 public interface StudentDao {
     int deleteByPrimaryKey(Long id);
@@ -16,4 +19,6 @@ public interface StudentDao {
     int updateByPrimaryKey(Student record);
 
     Student selectByAccount(String account);
+
+    List<Student> getStudents(ParamMap paramMap);
 }
